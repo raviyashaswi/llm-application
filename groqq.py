@@ -2,7 +2,7 @@ import os
 from groq import Groq
 
 chunk_size = 1000
-client = Groq(api_key="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")
+client = Groq(api_key="")
 
 def chunk_maker(message):
     if not message:
@@ -43,4 +43,5 @@ def groqc(user_message):
 # Test the function
 #print(groqc("what are the max number of lines and characters that you can take as input"))
 #print(groqc("a" * 5900 + "write a line about letter 'b' dont mention anything about long string before"))
+
 print(groqc("a" * 5900 + "count number of 'a'")) 
