@@ -1,97 +1,80 @@
 # llm-application
 
-**Summarize Large Files Using Grok LLM**
-
-This repository demonstrates how to utilize Grok LLM to efficiently summarize large files by splitting them into manageable chunks, processing each chunk, and aggregating insights. It is designed for users who need to extract key information from extensive textual data using modern language models.
+This project demonstrates how to use Groq LLM for processing and summarizing large text inputs by splitting them into manageable chunks and communicating with the Groq API. It also provides simple local chat storage functionality.
 
 ## Features
 
-- **Chunked Summarization**: Breaks large files into smaller pieces for efficient processing.
-- **Grok LLM Integration**: Uses Grok LLM to generate concise summaries.
-- **Multi-language Support**: Built primarily in Python, with JavaScript for UI, and HTML/CSS for presentation.
-- **Extensible Design**: Easily adapt to other LLMs or file types.
+- **Chunked LLM Input:** The `groqq.py` script splits long user messages into chunks and sends them sequentially to the Groq API, enabling the handling of inputs longer than the model's prompt limit.
+- **Groq API Integration:** Uses the Groq Python client to interact with the Llama-3.3-70b-versatile model.
+- **Local Chat Storage:** The `storage.py` script enables simple reading and writing of chat history to a local JSON file, with timestamped entries.
 
-## Tech Stack
-
-- **Python**: Core logic and backend.
-- **JavaScript**: Frontend interactivity.
-- **HTML/CSS**: UI/UX styling.
-- **Grok LLM**: Language model for summarization.
-
-## Getting Started
+## Usage
 
 ### Prerequisites
 
 - Python 3.8+
-- Grok LLM API credentials (or an equivalent setup)
+- `groq` Python package (`pip install groq`)
+- A valid Groq API key
 
-### Installation
+### How it Works
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/raviyashaswi/llm-application.git
-   cd llm-application
-   ```
+#### groqq.py
 
-2. **Backend Setup**
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **`chunk_maker(message)`**: Splits messages into 1000-character chunks.
+- **`groqc(user_message)`**: Sends each chunk to the Groq API, concatenating responses for a final output. Handles long messages gracefully.
 
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npm run build
-   ```
+To use:
+```python
+from groqq import groqc
 
-4. **Configure Grok LLM**
-   - Add your Grok LLM API key or credentials in the configuration file (see `config.py` or relevant env setup).
+response = groqc("your very long input string here")
+print(response)
+```
 
-### Usage
+#### storage.py
 
-- Place your large text files in the `input` directory.
-- Run the summarization script:
-  ```bash
-  python main.py input/large_file.txt
-  ```
-- Summaries will be generated and saved in the `output` directory.
+- **`r_chat()`**: Reads chat history from `chats/chat.json`.
+- **`w_chat(user, text)`**: Writes a chat entry to the file, timestamped.
+
+To use:
+```python
+from storage import r_chat, w_chat
+
+w_chat("user", "Hello!")
+history = r_chat()
+print(history)
+```
 
 ### Example
 
 ```python
-from grok_llm import summarize_large_file
+# Summarize a long text using Groq LLM
+from groqq import groqc
+long_text = "a" * 5900 + "count number of 'a'"
+print(groqc(long_text))
 
-summary = summarize_large_file('input/large_file.txt')
-print(summary)
+# Store and retrieve chat history
+from storage import w_chat, r_chat
+w_chat("user", "Hi there!")
+print(r_chat())
 ```
 
-### Web Interface
+## File Structure
 
-Launch the frontend to upload files and view summaries:
-
-```bash
-npm start
+```
+groqq.py      # Handles chunked LLM messaging
+storage.py    # Simple chat storage in JSON
+chats/
+  chat.json   # Stores chat messages (auto-created)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Notes
 
-## Contributing
+- Make sure to set your Groq API key in `groqq.py`.
+- The chat storage system is basic and for local use only.
 
-Contributions are welcome! Please submit issues or pull requests for bug fixes, enhancements, or new features.
 
-1. Fork the repo
-2. Create a new branch (`git checkout -b feature-xyz`)
-3. Commit your changes
-4. Push to your branch
-5. Open a Pull Request
 
-## License
+## Author
 
-This project is licensed under the MIT License.
-
-## Contact
-
-For questions or support, open an issue or reach out to [raviyashaswi](https://github.com/raviyashaswi).
-
----
+[raviyashaswi](https://github.com/raviyashaswi)
