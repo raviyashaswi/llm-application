@@ -77,4 +77,4 @@ chats/
 
 ## Author
 
-[raviyashaswi](https://github.com/raviyashaswi)
+[Yashaswi Ravi](https://github.com/raviyashaswi)
